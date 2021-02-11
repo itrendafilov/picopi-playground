@@ -1,4 +1,5 @@
 if (NOT PICO_NO_HARDWARE)
     add_subdirectory(lcd_ssd1306_i2c)
     add_subdirectory(lcd_ili9486_spi)
+    add_subdirectory(lcd_ili9486_parallel)
 endif ()
