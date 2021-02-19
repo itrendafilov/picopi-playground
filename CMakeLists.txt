@@ -16,3 +16,4 @@ include(example_auto_set_url.cmake)
 
 # Add subdirectories
 add_subdirectory(tests)
+add_subdirectory(lib)
