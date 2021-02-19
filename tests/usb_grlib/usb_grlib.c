@@ -11,7 +11,7 @@
 #include "ili9486_driver.h"
 #include <grlib.h>
 
-Graphics_Context g_sContext;
+extern Graphics_Context g_sContext;
 extern const Graphics_Display g_ili9486_Driver;
 
 uint32_t colors[] = {GRAPHICS_COLOR_RED, GRAPHICS_COLOR_GREEN, GRAPHICS_COLOR_BLUE};

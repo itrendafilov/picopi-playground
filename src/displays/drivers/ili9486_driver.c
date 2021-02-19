@@ -34,15 +34,8 @@
 
    GPIO17 (pin 22) TE Validation
        -- Debug Only pin to validate the sync method externally
-       -- Use oscilloscope and wire two channels to both pin 22 and 29
+       -- Use oscilloscope and wire two channels to both pin 21 and 22
 */
-
-const Graphics_Rectangle noScreenClipping = {
-       .xMin = 0,
-       .yMin = 0,
-       .xMax = LCD_X_SIZE - 1,
-       .yMax = LCD_Y_SIZE - 1
-};
 
 #define PIN_VAL  17
 #define PIN_TE   22
@@ -56,6 +49,13 @@ const Graphics_Rectangle noScreenClipping = {
 
 void te_callback_sync(uint gpio, uint32_t events);  // Find an VSYNC sygnal and then reconfigure
 void te_callback_run(uint gpio, uint32_t events);   // to the a free running VSYNC based on HSYNC count
+
+const Graphics_Rectangle noScreenClipping = {
+       .xMin = 0,
+       .yMin = 0,
+       .xMax = LCD_X_SIZE - 1,
+       .yMax = LCD_Y_SIZE - 1
+};
 
 volatile int hsync_row = 0;
 
@@ -332,6 +332,12 @@ void ili9486_write_repeat(uint16_t ulValue, uint16_t times) {
         for (int i = 0; i < times; i++) {
             ili9486_repeat(); // repeat last color
         }
+    }
+}
+
+void ili9486_write_buffer(uint16_t *ulValue, uint16_t count) {
+    while (count--) {
+        ili9486_write_data(ulValue++); // write next
     }
 }
 
@@ -730,6 +736,8 @@ const Graphics_Display g_ili9486_Driver =
     ili9486_DriverFlush,
     ili9486_DriverClearScreen
 };
+
+Graphics_Context g_sContext;
 
 // Initializes the display driver.
 // This function initializes the LCD controller

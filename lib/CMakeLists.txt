@@ -13,5 +13,11 @@ add_library(grlib
         )
 
 target_include_directories(grlib PRIVATE grlib)
-
 pico_add_extra_outputs(grlib)
+
+add_library(speedmath
+        speedmath/speedmath.c
+        )
+
+target_include_directories(speedmath PRIVATE speedmath)
+pico_add_extra_outputs(speedmath)
