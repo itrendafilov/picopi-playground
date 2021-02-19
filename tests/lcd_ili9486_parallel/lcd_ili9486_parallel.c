@@ -19,13 +19,11 @@
    ...
    GPIO15 (pin 20) Data bit 15 -> DB15 on ili9486 board
    
-   GPIO16 (pin 21) Tearing Effect -> TE pin on ili9486 board
+   GPIO22 (pin 29) Tearing Effect -> TE pin on ili9486 board
 
-   GPIO18 (pin 24) Module reset -> RESX on ili9486 board
-   GPIO19 (pin 25) Read enable -> RDX on ili9486 board
-   GPIO20 (pin 26) Write enable -> WRX on ili9486 board
-   GPIO21 (pin 27) Data/Command -> RS/DCX on ili9486 board
-   GPIO22 (pin 29) Chip Sellect -> CS on ili9486 board
+   GPIO26 (pin 31) Module reset -> RESX on ili9486 board
+   GPIO27 (pin 32) Write enable -> WRX on ili9486 board
+   GPIO28 (pin 34) Data/Command -> RS/DCX on ili9486 board
 
    3.3v (pin 36) -> VCC on ili9486 board
    GND (pin 38)  -> GND on ili9486 board
@@ -40,12 +38,10 @@
 */
 
 #define PIN_VAL  17
-#define PIN_TE   16
-#define PIN_RESX 18
-#define PIN_RDX  19
-#define PIN_WRX  20
-#define PIN_DCX  21
-#define PIN_CS   22
+#define PIN_TE   22
+#define PIN_RESX 26
+#define PIN_WRX  27
+#define PIN_DCX  28
 
 #define SPI_PORT spi1
 #define ALARM_NUM 0
@@ -194,21 +190,11 @@ void ili9486_init() {
     gpio_set_dir(PIN_DCX, GPIO_OUT);
     dcx_data(); // keep in data mode as we expect to send more data then commands
 
-    /* Setup Read Data pin */
-    gpio_init(PIN_RDX);
-    gpio_set_dir(PIN_RDX, GPIO_OUT);
-    gpio_put(PIN_RDX, 1);
-
     /* Setup Write Data pin */
     gpio_init(PIN_WRX);
     gpio_set_dir(PIN_WRX, GPIO_OUT);
     gpio_set_function(PIN_WRX, GPIO_FUNC_SIO);
     wrx_deselect();
-
-    /* Setup Chip Select pin */
-    gpio_init(PIN_CS);
-    gpio_set_dir(PIN_CS, GPIO_OUT);
-    gpio_put(PIN_CS, 0);  // Active low
 
     /* Setup reset display pin */
     gpio_init(PIN_RESX);
