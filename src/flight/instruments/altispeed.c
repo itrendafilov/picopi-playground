@@ -35,10 +35,6 @@ void APP_altispeed_init() {
     Graphics_setBackgroundColor(&g_sContext, ClrBlack);
     Graphics_clearDisplay(&g_sContext);
 
-    // We draw a lot of horizontal lines, thus prepare a buffer with that color
-    // N.B. it is also used in zone redraw methods, so don't fill with other color
-//    Graphics_loadCustomLineColor(&g_sContext);
-
     //                    _
     //               ____| |
     // Left arrow   <____  |
@@ -46,13 +42,13 @@ void APP_altispeed_init() {
     //
     Graphics_drawLineCustom(&g_sContext, 10, 120, 20, 100);
     Graphics_drawLineCustom(&g_sContext, 10, 120, 20, 140);
-    Graphics_drawLineHCustom(&g_sContext, 20, 60, 100);
-    Graphics_drawLineVCustom(&g_sContext, 60, 90, 100);
-    Graphics_drawLineHCustom(&g_sContext, 60, 85, 90);
-    Graphics_drawLineVCustom(&g_sContext, 85, 90, 150);
-    Graphics_drawLineHCustom(&g_sContext, 60, 85, 150);
-    Graphics_drawLineVCustom(&g_sContext, 60, 140, 150);
-    Graphics_drawLineHCustom(&g_sContext, 20, 60, 140);
+    Graphics_drawLineH(&g_sContext, 20, 60, 100);
+    Graphics_drawLineV(&g_sContext, 60, 90, 100);
+    Graphics_drawLineH(&g_sContext, 60, 85, 90);
+    Graphics_drawLineV(&g_sContext, 85, 90, 150);
+    Graphics_drawLineH(&g_sContext, 60, 85, 150);
+    Graphics_drawLineV(&g_sContext, 60, 140, 150);
+    Graphics_drawLineH(&g_sContext, 20, 60, 140);
 
     //                    __
     //                ___|  |
@@ -61,21 +57,21 @@ void APP_altispeed_init() {
     //
     Graphics_drawLineCustom(&g_sContext, 309, 120, 300, 100);
     Graphics_drawLineCustom(&g_sContext, 309, 120, 300, 140);
-    Graphics_drawLineVCustom(&g_sContext, 300, 90, 100);
-    Graphics_drawLineHCustom(&g_sContext, 250, 300, 90);
-    Graphics_drawLineVCustom(&g_sContext, 250, 90, 100);
-    Graphics_drawLineHCustom(&g_sContext, 200, 250, 100);
-    Graphics_drawLineVCustom(&g_sContext, 200, 100, 140);
-    Graphics_drawLineHCustom(&g_sContext, 200, 250, 140);
-    Graphics_drawLineVCustom(&g_sContext, 250, 140, 150);
-    Graphics_drawLineHCustom(&g_sContext, 250, 300, 150);
-    Graphics_drawLineVCustom(&g_sContext, 300, 140, 150);
+    Graphics_drawLineV(&g_sContext, 300, 90, 100);
+    Graphics_drawLineH(&g_sContext, 250, 300, 90);
+    Graphics_drawLineV(&g_sContext, 250, 90, 100);
+    Graphics_drawLineH(&g_sContext, 200, 250, 100);
+    Graphics_drawLineV(&g_sContext, 200, 100, 140);
+    Graphics_drawLineH(&g_sContext, 200, 250, 140);
+    Graphics_drawLineV(&g_sContext, 250, 140, 150);
+    Graphics_drawLineH(&g_sContext, 250, 300, 150);
+    Graphics_drawLineV(&g_sContext, 300, 140, 150);
 
     // Baro box
-    Graphics_drawLineHCustom(&g_sContext, 130, 190, 30);
-    Graphics_drawLineHCustom(&g_sContext, 130, 190, 60);
-    Graphics_drawLineVCustom(&g_sContext, 130, 30, 60);
-    Graphics_drawLineVCustom(&g_sContext, 190, 30, 60);
+    Graphics_drawLineH(&g_sContext, 130, 190, 30);
+    Graphics_drawLineH(&g_sContext, 130, 190, 60);
+    Graphics_drawLineV(&g_sContext, 130, 30, 60);
+    Graphics_drawLineV(&g_sContext, 190, 30, 60);
     Graphics_setFont(&g_sContext, &g_sFontEbrima24b);
     Graphics_drawStringCentered(&g_sContext, "BARO", 4, 160, 15, false);
 

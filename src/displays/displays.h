@@ -21,10 +21,6 @@ void Graphics_copyDisplayCustom(int x0, int y0, int offset,
                                 const Graphics_Context *dest,
                                 const Graphics_Context *src);
 
-void Graphics_loadCustomLineColor(const Graphics_Context *context);
-void Graphics_drawLineHCustom(const Graphics_Context *context, int x1, int x2, int y);
-void Graphics_drawLineVCustom(const Graphics_Context *context, int x, int y1, int y2);
-
 void Graphics_fillTriangle(const Graphics_Context *context,
                            int x1, int y1,int x2, int y2, int x3, int y3);
 void Graphics_drawLineWidth(const Graphics_Context *context,

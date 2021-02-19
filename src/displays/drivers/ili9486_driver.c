@@ -325,19 +325,19 @@ inline void ili9486_set_position(int16_t lX, int16_t lY)
     ili9486_set_limits(lX, lY, LCD_X_SIZE - 1, LCD_Y_SIZE - 1);
 }
 
-void ili9486_write_repeat(uint16_t ulValue, uint16_t times) {
+void ili9486_write_repeat(uint16_t ulValue, uint32_t times) {
     if (times--) {
         ili9486_write_data(ulValue); // write once
 
-        for (int i = 0; i < times; i++) {
+        while (times-- > 0) {
             ili9486_repeat(); // repeat last color
         }
     }
 }
 
-void ili9486_write_buffer(uint16_t *ulValue, uint16_t count) {
+void ili9486_write_buffer(uint16_t *ulValue, uint32_t count) {
     while (count--) {
-        ili9486_write_data(ulValue++); // write next
+        ili9486_write_data(*ulValue++); // write next
     }
 }
 
@@ -563,7 +563,7 @@ ili9486_DriverLineDrawH(void *pvDisplayData,
                          uint16_t ulValue)
 {
     // Limit to one pixel per row
-    ili9486_set_limits(MAPPED_X(lX1, lY), MAPPED_Y(lX1, lY), MAPPED_X(lX1, lY), LCD_Y_SIZE - 1);
+    ili9486_set_position(MAPPED_X(lX1, lY), MAPPED_Y(lX1, lY));
     ili9486_write_repeat(ulValue, lX2 - lX1 + 1);
 }
 
@@ -591,7 +591,7 @@ ili9486_DriverLineDrawV(void *pvDisplayData,
                          int16_t lY2,
                          uint16_t ulValue)
 {
-    ili9486_set_position(MAPPED_X(lX, lY2), MAPPED_Y(lX, lY2));
+    ili9486_set_limits(MAPPED_X(lX, lY1), MAPPED_Y(lX, lY1), MAPPED_X(lX, lY1), LCD_Y_SIZE - 1);
     ili9486_write_repeat(ulValue, lY2 - lY1 + 1);
 }
 
@@ -623,7 +623,7 @@ ili9486_DriverRectFill(void *pvDisplayData,
     int16_t y1 = pRect->sYMax;
 
     // Create an memory addressing box, so we fill only inside the box
-    ili9486_set_limits(MAPPED_X(x1, y1), MAPPED_Y(x0, y0), MAPPED_X(x0, y0), MAPPED_Y(x1, y1));
+    ili9486_set_limits(MAPPED_X(x0, y0), MAPPED_Y(x0, y0), MAPPED_X(x1, y1), MAPPED_Y(x1, y1));
 
     y1 -= --y0; // y1 - y0 + 1 pre-calculated
     x1 -= --x0; // x1 - x0 + 1 pre-calculated

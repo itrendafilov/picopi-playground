@@ -62,7 +62,7 @@ void APP_altispeed_zone4_redraw(int16_t altitude) {
         /* Draw new line */
         // Color is cached for LineHCustom
         if (currM == INSTRUMENT_ALITSPEED_PPFD) currM = 0;
-        Graphics_drawLineHCustom(&g_sContext, clipX(currM, currY), 320, currY);
+        Graphics_drawLineH(&g_sContext, clipX(currM, currY), 320, currY);
     }
 }
 

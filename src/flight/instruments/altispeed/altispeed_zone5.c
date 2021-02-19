@@ -41,7 +41,7 @@ static void moveLineTextLeft(int oldY, int newY, int val) {
     Graphics_fillRectangle(&g_sContext, &blackZone);
 
     // Color is cached for LineHCustom
-    Graphics_drawLineHCustom(&g_sContext, 10, 19, newY);
+    Graphics_drawLineH(&g_sContext, 10, 19, newY);
     Graphics_setForegroundColor(&g_sContext, ClrWhite);
 
     int c = 3, x = 52;

@@ -115,16 +115,16 @@ void APP_altispeed_zone3_redraw(int16_t airspeed) {
 
     int16_t delta = 120 + fraction + (centerSpeed % 5) * INSTRUMENT_ALITSPEED_PPK;
     // Color is cached for LineHCustom
-    Graphics_drawLineHCustom(&g_sContext, 0, 9, delta); // ~0
-    delta += 25; Graphics_drawLineHCustom(&g_sContext, 0, 9, delta); // -5
-    delta += 25; Graphics_drawLineHCustom(&g_sContext, 0, 9, delta); // -10
-    delta += 25; Graphics_drawLineHCustom(&g_sContext, 0, 9, delta); // -15
-    delta += 25; Graphics_drawLineHCustom(&g_sContext, 0, 9, delta); // -20
-    delta -=125; Graphics_drawLineHCustom(&g_sContext, 0, 9, delta); // +5
-    delta -= 25; Graphics_drawLineHCustom(&g_sContext, 0, 9, delta); // +10
-    delta -= 25; Graphics_drawLineHCustom(&g_sContext, 0, 9, delta); // +15
-    delta -= 25; Graphics_drawLineHCustom(&g_sContext, 0, 9, delta); // +20
-    delta -= 25; Graphics_drawLineHCustom(&g_sContext, 0, 9, delta); // +25
+    Graphics_drawLineH(&g_sContext, 0, 9, delta); // ~0
+    delta += 25; Graphics_drawLineH(&g_sContext, 0, 9, delta); // -5
+    delta += 25; Graphics_drawLineH(&g_sContext, 0, 9, delta); // -10
+    delta += 25; Graphics_drawLineH(&g_sContext, 0, 9, delta); // -15
+    delta += 25; Graphics_drawLineH(&g_sContext, 0, 9, delta); // -20
+    delta -=125; Graphics_drawLineH(&g_sContext, 0, 9, delta); // +5
+    delta -= 25; Graphics_drawLineH(&g_sContext, 0, 9, delta); // +10
+    delta -= 25; Graphics_drawLineH(&g_sContext, 0, 9, delta); // +15
+    delta -= 25; Graphics_drawLineH(&g_sContext, 0, 9, delta); // +20
+    delta -= 25; Graphics_drawLineH(&g_sContext, 0, 9, delta); // +25
 
     // Restore to no screen clipping
 }
