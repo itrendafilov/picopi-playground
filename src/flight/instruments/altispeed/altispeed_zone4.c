@@ -39,14 +39,12 @@ void APP_altispeed_zone4_redraw(int16_t altitude) {
     int prevX = INSTRUMENT_ALTISPEED_START_X(prevAltitude);
 
     // Move prevX before currX as we don't want to delete what we just printed :D
-    if (prevX >= currX + (INSTRUMENT_ALITSPEED_PPFY >> 1)) prevX -= INSTRUMENT_ALITSPEED_PPFY;
+    if (prevX >= currX) currX += INSTRUMENT_ALITSPEED_PPFY;
 
     int currM = 0;
     int prevM = 0;
 
     prevAltitude = altitude;
-
-    Graphics_setFont(&g_sContext, &g_sFontEbrima16b);
 
     for (; currX >= 0 || prevX >= 0;
         /* step */

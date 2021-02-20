@@ -189,15 +189,15 @@ void Graphics_clearDigitMedium(int x, int y) {
     Graphics_fillRectangle(&g_sContext, &digit_mask);
 }
 void Graphics_clearDigitMediumRollSmall(int x, int y) {
-    digit_mask.xMin = x;
-    digit_mask.xMax = x + CALC_EBRIMA_MEDIUM_WIDTH;
-    digit_mask.yMin = y - CALC_EBRIMA_MEDIUM_ROLL_SMALL_X;
-    digit_mask.yMax = y - 1;
+    digit_mask.xMin = x - CALC_EBRIMA_MEDIUM_ROLL_SMALL_X;
+    digit_mask.xMax = x - 1;
+    digit_mask.yMin = y;
+    digit_mask.yMax = y + CALC_EBRIMA_MEDIUM_WIDTH;
 
     Graphics_fillRectangle(&g_sContext, &digit_mask);
 
-    digit_mask.yMin = y + CALC_EBRIMA_MEDIUM_HEIGHT;
-    digit_mask.yMax = digit_mask.yMin + CALC_EBRIMA_MEDIUM_ROLL_SMALL_X;
+    digit_mask.xMin = x + CALC_EBRIMA_MEDIUM_HEIGHT;
+    digit_mask.xMax = digit_mask.xMin + CALC_EBRIMA_MEDIUM_ROLL_SMALL_X;
     Graphics_fillRectangle(&g_sContext, &digit_mask);
 
 }
