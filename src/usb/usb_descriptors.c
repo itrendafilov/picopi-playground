@@ -25,6 +25,10 @@
 
 #include "tusb.h"
 
+#include <stdlib.h>
+#include "pico/stdlib.h"
+#include "pico/unique_id.h"
+
 //--------------------------------------------------------------------+
 // Device Descriptors
 //--------------------------------------------------------------------+
@@ -112,7 +116,7 @@ char const *string_desc_arr[] =
                 (const char[]) {0x09, 0x04}, // 0: is supported language is English (0x0409)
                 "PicoDisplay",               // 1: Manufacturer
                 "Flight Instument Panel",    // 2: Product
-                "123456",                    // 3: Serials, should use chip ID
+                "12345678",                  // 3: Serials, should use chip ID
         };
 
 static uint16_t _desc_str[32];
@@ -127,6 +131,17 @@ uint16_t const *tud_descriptor_string_cb(uint8_t index, uint16_t langid) {
     if (index == 0) {
         memcpy(&_desc_str[1], string_desc_arr[0], 2);
         chr_count = 1;
+    } else if (index == 3){
+        pico_unique_board_id_t board_id;
+        pico_get_unique_board_id(&board_id);
+        chr_count = PICO_UNIQUE_BOARD_ID_SIZE_BYTES;
+        uint16_t *str = &_desc_str[1];
+        char tmp[2];
+        for (int i = 0; i < PICO_UNIQUE_BOARD_ID_SIZE_BYTES; ++i) {
+            itoa(board_id.id[i], tmp, 16);
+            *str = tmp[0]; str++;
+            *str = tmp[1]; str++;
+        }
     } else {
         // Convert ASCII string into UTF-16
 

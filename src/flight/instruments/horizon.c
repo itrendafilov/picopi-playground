@@ -7,8 +7,12 @@
 #include <stdint.h>
 #include "displays/displays.h"
 #include "flight/instrument.h"
+#include "pico/stdlib.h"
+#include "pico/sem.h"
 
 //#define APP_HORIZON_DEBUG
+
+static semaphore_t horizonDrawing;
 
 #ifndef M_PI
 #define M_PI    3.1415926535
@@ -145,6 +149,8 @@ void APP_horizon_draw_static() {
 }
 
 void APP_horizon_init() {
+    sem_init(&horizonDrawing, 1, 1);
+
     Graphics_Rectangle rect = {
           .xMin = 0, .xMax = LCD_X_SIZE / 2,
           .yMin = 0, .yMax = LCD_Y_SIZE - 1
@@ -174,11 +180,7 @@ void APP_horizon_init() {
     Graphics_setForegroundColor(&g_sContext, ClrWhite); // restore
 }
 
-volatile bool drawing = false;
-
 void APP_horizon_refresh() {
-    drawing = true;
-
     float phi = horizonParams[APP_INSTRUMENT_HORIZON_BANK] * M_TORAD; // convert to rads and store
     float currA = tan(phi);
     // we draw attack angle with 12px per degree
@@ -241,7 +243,7 @@ void APP_horizon_refresh() {
     APP_horizon_draw_static();
     APP_horizon_draw_arc();
 
-    drawing = false;
+    sem_release(&horizonDrawing);
 }
 
 float stepPitch = 1.0;
@@ -289,8 +291,7 @@ void APP_horizon_input(APP_input_events event) {
 }
 
 void APP_horizon_update(APP_instrument_horizon_param param, float value) {
-    if (!drawing) {
-        horizonParams[param] = value;
-        APP_instruments_refresh();
-    }
+    sem_acquire_blocking(&horizonDrawing);
+    horizonParams[param] = value;
+    APP_instruments_refresh();
 }

@@ -57,6 +57,6 @@ target_include_directories(flightpanel PRIVATE
         ${CMAKE_SOURCE_DIR}/lib/grlib
         ${CMAKE_SOURCE_DIR}/lib/speedmath
         )
-target_link_libraries(flightpanel PRIVATE pico_stdlib pico_multicore tinyusb_device tinyusb_board grlib speedmath)
+target_link_libraries(flightpanel PRIVATE pico_stdlib pico_multicore pico_unique_id tinyusb_device tinyusb_board grlib speedmath)
 
 pico_add_extra_outputs(flightpanel)
