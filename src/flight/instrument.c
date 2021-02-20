@@ -6,10 +6,10 @@
 #include "flight/instrument.h"
 #include "pico/stdlib.h"
 #include "pico/multicore.h"
+#include "pico/sem.h"
 #include "bsp/board.h"
 
-// #include "pico/sem.h"
-// static semaphore_t semInstUpdate;
+static semaphore_t semInstUpdate;
 
 volatile static unsigned int activeInstrument = APP_INSTRUMENT_ALTITUDE_SPEED; // APP_INSTRUMENT_HORIZON; //
 
@@ -92,7 +92,7 @@ void instrumentsResetGraphics() {
 void instrumentRedraw()
 {
     for (;;) {
-        multicore_fifo_pop_blocking();
+        sem_acquire_blocking(&semInstUpdate);
         APP_instruments_refresh_callbacks[activeInstrument]();
     }
 }
@@ -248,7 +248,8 @@ void instrumentRedraw()
 // }
 
 void APP_instruments_init() {
-// sem_init(&semInstUpdate, 0, 1);
+    sem_init(&semInstUpdate, 0, 1);
+    
 #ifdef Board_LCD_ILI9486
     // Initialize driver
     ili9486_DriverInit();
@@ -268,7 +269,7 @@ void APP_instruments_init() {
 
 void APP_instruments_refresh() {
     // send any message to Core1 so it unblocks
-    multicore_fifo_push_blocking(1);
+    sem_release(&semInstUpdate);
 }
 
 void APP_instruments_change(unsigned int instrument) {
