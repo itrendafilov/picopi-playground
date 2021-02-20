@@ -182,9 +182,9 @@ extern const Graphics_Image numbers_ebrima_medium_2bpp;
 extern const Graphics_Image numbers_ebrima_medium0_2bpp;
 void Graphics_clearDigitMedium(int x, int y) {
     digit_mask.xMin = x;
-    digit_mask.xMax = x + CALC_EBRIMA_MEDIUM_WIDTH;
+    digit_mask.xMax = x + CALC_EBRIMA_MEDIUM_HEIGHT;
     digit_mask.yMin = y;
-    digit_mask.yMax = y + CALC_EBRIMA_MEDIUM_HEIGHT;
+    digit_mask.yMax = y + CALC_EBRIMA_MEDIUM_WIDTH;
 
     Graphics_fillRectangle(&g_sContext, &digit_mask);
 }

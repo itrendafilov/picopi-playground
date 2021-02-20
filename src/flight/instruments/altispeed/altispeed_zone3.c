@@ -65,19 +65,19 @@ void APP_altispeed_zone3_redraw(int16_t airspeed) {
     drawZone.yMin = 0;
     drawZone.yMax = 9;
     drawZone.xMax = absCenter - instrumentAltispeedLeftBars[INSTRUMENT_ALTISPEED_LEFTBAR_YELLOW_MAX];
-    drawZone.xMin = drawZone.yMax - 1000;
+    drawZone.xMin = drawZone.xMax - 1000;
     Graphics_setForegroundColor(&g_sContext, ClrRed);
     Graphics_fillRectangle(&g_sContext, &drawZone);
 
 
     // Draw Yellow Zone.
-    drawZone.xMin = drawZone.yMax;
+    drawZone.xMin = drawZone.xMax;
     drawZone.xMax = absCenter - instrumentAltispeedLeftBars[INSTRUMENT_ALTISPEED_LEFTBAR_GREEN_MAX];
     Graphics_setForegroundColor(&g_sContext, ClrYellow);
     Graphics_fillRectangle(&g_sContext, &drawZone);
 
     // Draw Green Zone.
-    drawZone.xMin = drawZone.yMax;
+    drawZone.xMin = drawZone.xMax;
     drawZone.xMax = absCenter - instrumentAltispeedLeftBars[INSTRUMENT_ALTISPEED_LEFTBAR_GREEN_WHITE_MAX];
     Graphics_setForegroundColor(&g_sContext, ClrGreen);
     Graphics_fillRectangle(&g_sContext, &drawZone);
@@ -85,7 +85,7 @@ void APP_altispeed_zone3_redraw(int16_t airspeed) {
     // Draw Green Zone in col 2.
     drawZone.yMin = 5;
     drawZone.yMax = 9;
-    drawZone.xMin = drawZone.yMax;
+    drawZone.xMin = drawZone.xMax;
     drawZone.xMax = absCenter - instrumentAltispeedLeftBars[INSTRUMENT_ALTISPEED_LEFTBAR_WHITE_BLACK_MAX];
     Graphics_fillRectangle(&g_sContext, &drawZone);
 
@@ -96,7 +96,7 @@ void APP_altispeed_zone3_redraw(int16_t airspeed) {
     Graphics_fillRectangle(&g_sContext, &drawZone);
 
     // Draw White Zone in col 2.
-    drawZone.xMin = drawZone.yMax;
+    drawZone.xMin = drawZone.xMax;
     drawZone.xMax = absCenter - instrumentAltispeedLeftBars[INSTRUMENT_ALTISPEED_LEFTBAR_BLACK_MAX];
     Graphics_fillRectangle(&g_sContext, &drawZone);
 
@@ -108,23 +108,28 @@ void APP_altispeed_zone3_redraw(int16_t airspeed) {
 
     // Draw Black Zone. (in Red ;) )
     drawZone.yMin = 0;
-    drawZone.xMin = drawZone.yMax;
-    drawZone.xMax = drawZone.yMin + 1000;
+    drawZone.xMin = drawZone.xMax;
+    drawZone.xMax = drawZone.xMin + 1000;
     Graphics_setForegroundColor(&g_sContext, ClrRed);
     Graphics_fillRectangle(&g_sContext, &drawZone);
 
     int16_t delta = 160 + fraction + (centerSpeed % 5) * INSTRUMENT_ALITSPEED_PPK;
+    const int16_t step = 5 * INSTRUMENT_ALITSPEED_PPK;
     Graphics_setForegroundColor(&g_sContext, ClrWhite);
-    Graphics_drawLineH(&g_sContext, 0, 9, delta); // ~0
-    delta += 25; Graphics_drawLineV(&g_sContext, delta, 0, 9); // -5
-    delta += 25; Graphics_drawLineV(&g_sContext, delta, 0, 9); // -10
-    delta += 25; Graphics_drawLineV(&g_sContext, delta, 0, 9); // -15
-    delta += 25; Graphics_drawLineV(&g_sContext, delta, 0, 9); // -20
-    delta -=125; Graphics_drawLineV(&g_sContext, delta, 0, 9); // +5
-    delta -= 25; Graphics_drawLineV(&g_sContext, delta, 0, 9); // +10
-    delta -= 25; Graphics_drawLineV(&g_sContext, delta, 0, 9); // +15
-    delta -= 25; Graphics_drawLineV(&g_sContext, delta, 0, 9); // +20
-    delta -= 25; Graphics_drawLineV(&g_sContext, delta, 0, 9); // +25
+    Graphics_drawLineV(&g_sContext, delta, 0, 9); // ~0
+    delta += step; Graphics_drawLineV(&g_sContext, delta, 0, 9); // -5
+    delta += step; Graphics_drawLineV(&g_sContext, delta, 0, 9); // -10
+    delta += step; Graphics_drawLineV(&g_sContext, delta, 0, 9); // -15
+    delta += step; Graphics_drawLineV(&g_sContext, delta, 0, 9); // -20
+    delta += step; Graphics_drawLineV(&g_sContext, delta, 0, 9); // -25
+    delta += step; Graphics_drawLineV(&g_sContext, delta, 0, 9); // -30
+    delta -=step*7; Graphics_drawLineV(&g_sContext, delta, 0, 9); // +5
+    delta -= step; Graphics_drawLineV(&g_sContext, delta, 0, 9); // +10
+    delta -= step; Graphics_drawLineV(&g_sContext, delta, 0, 9); // +15
+    delta -= step; Graphics_drawLineV(&g_sContext, delta, 0, 9); // +20
+    delta -= step; Graphics_drawLineV(&g_sContext, delta, 0, 9); // +25
+    delta -= step; Graphics_drawLineV(&g_sContext, delta, 0, 9); // +30
+    delta -= step; Graphics_drawLineV(&g_sContext, delta, 0, 9); // +35
 
     // Restore to no screen clipping
 }

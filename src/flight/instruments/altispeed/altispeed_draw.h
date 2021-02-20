@@ -17,12 +17,12 @@
 #define INSTRUMENT_ALTISPEED_ATOD(alt)       (alt / 500)
 
 /*
- * 1. Start at X 120
+ * 1. Start at X 160
  * 2. Add the delta between last minor division and current value
  * 3. Add delta from minor to major division
  * 4. We can view up to two major scale so add an offset for them
  */
-#define INSTRUMENT_ALTISPEED_START_XC(alt)   (120 + INSTRUMENT_ALTISPEED_ATOY(alt) + INSTRUMENT_ALTISPEED_ATOM(alt) * INSTRUMENT_ALITSPEED_PPF)
+#define INSTRUMENT_ALTISPEED_START_XC(alt)   (160 + INSTRUMENT_ALTISPEED_ATOY(alt) + INSTRUMENT_ALTISPEED_ATOM(alt) * INSTRUMENT_ALITSPEED_PPF)
 #define INSTRUMENT_ALTISPEED_START_X(alt)    (INSTRUMENT_ALTISPEED_START_XC(alt) + 2 * INSTRUMENT_ALITSPEED_PPFY)
 
 

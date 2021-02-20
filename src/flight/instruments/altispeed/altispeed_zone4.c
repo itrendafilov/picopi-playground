@@ -17,18 +17,18 @@ void APP_altispeed_zone4_reset() {
 
 static int clipY(int m, int x) {
     // very special on the center
-    if (x == 120) return 311;
+    if (x == 160) return 311;
 
     if (m) return 310; // m!=0
 
-    if (x < 100) return 301;
-    if (x > 140) return 301;
+    if (x < 140) return 301;
+    if (x > 180) return 301;
 
     // center zone
-    if (x < 104) return 303;
-    if (x < 108) return 306;
-    if (x > 136) return 303;
-    if (x > 132) return 306;
+    if (x < 144) return 303;
+    if (x < 148) return 306;
+    if (x > 176) return 303;
+    if (x > 172) return 306;
 
     return 310;
 }

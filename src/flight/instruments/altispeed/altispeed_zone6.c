@@ -62,7 +62,7 @@ void APP_altispeed_zone6a_redraw(int16_t altitude) {
            .yMin = 250,
            .yMax = 319,
            .xMin = 0,
-           .xMax = 89
+           .xMax = 129
     };
 
     int val = INSTRUMENT_ALTISPEED_ATOD(altitude);
@@ -92,8 +92,8 @@ void APP_altispeed_zone6b_redraw(int16_t altitude) {
     const Graphics_Rectangle clippingZone2 = {
            .yMin = 250,
            .yMax = 319,
-           .xMin = 151,
-           .xMax = 239
+           .xMin = 191,
+           .xMax = 319
     };
 
     int val = INSTRUMENT_ALTISPEED_ATOD(altitude) - 2;
@@ -108,7 +108,7 @@ void APP_altispeed_zone6b_redraw(int16_t altitude) {
 
     Graphics_setFont(&g_sContext, &g_sFontEbrima16b);
     Graphics_setClipRegion(&g_sContext, (Graphics_Rectangle*)&clippingZone2);
-    for (; currX > 120 || prevX > 120;
+    for (; currX > 160 || prevX > 160;
         /* step */
             val++, currX -= INSTRUMENT_ALITSPEED_PPFY, prevX -= INSTRUMENT_ALITSPEED_PPFY
     ) {

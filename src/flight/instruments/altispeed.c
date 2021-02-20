@@ -40,32 +40,32 @@ void APP_altispeed_init() {
     // Left arrow   <____  |
     //                   |_|
     //
-    Graphics_drawLineCustom(&g_sContext, 120, 10, 100, 20);
-    Graphics_drawLineCustom(&g_sContext, 120, 10, 140, 20);
-    Graphics_drawLineV(&g_sContext, 100, 20, 60);
-    Graphics_drawLineH(&g_sContext, 90, 100, 60);
-    Graphics_drawLineV(&g_sContext, 90, 60, 85);
-    Graphics_drawLineH(&g_sContext, 90, 150, 85);
-    Graphics_drawLineV(&g_sContext, 150, 60, 85);
-    Graphics_drawLineH(&g_sContext, 140, 150, 60);
+    Graphics_drawLineCustom(&g_sContext, 160, 10, 140, 20);
+    Graphics_drawLineCustom(&g_sContext, 160, 10, 180, 20);
     Graphics_drawLineV(&g_sContext, 140, 20, 60);
+    Graphics_drawLineH(&g_sContext, 130, 140, 60);
+    Graphics_drawLineV(&g_sContext, 130, 60, 85);
+    Graphics_drawLineH(&g_sContext, 130, 190, 85);
+    Graphics_drawLineV(&g_sContext, 190, 60, 85);
+    Graphics_drawLineH(&g_sContext, 180, 190, 60);
+    Graphics_drawLineV(&g_sContext, 180, 20, 60);
 
     //                    __
     //                ___|  |
     // Right arrow   |___    >
     //                   |__|
     //
-    Graphics_drawLineCustom(&g_sContext, 120, 309, 100, 300);
-    Graphics_drawLineCustom(&g_sContext, 120, 309, 140, 300);
-    Graphics_drawLineH(&g_sContext, 90, 100, 300);
-    Graphics_drawLineV(&g_sContext, 90, 250, 300);
-    Graphics_drawLineH(&g_sContext, 90, 100, 250);
-    Graphics_drawLineV(&g_sContext, 100, 200, 250);
-    Graphics_drawLineH(&g_sContext, 100, 140, 200);
+    Graphics_drawLineCustom(&g_sContext, 160, 309, 140, 300);
+    Graphics_drawLineCustom(&g_sContext, 160, 309, 180, 300);
+    Graphics_drawLineH(&g_sContext, 130, 140, 300);
+    Graphics_drawLineV(&g_sContext, 130, 250, 300);
+    Graphics_drawLineH(&g_sContext, 130, 140, 250);
     Graphics_drawLineV(&g_sContext, 140, 200, 250);
-    Graphics_drawLineH(&g_sContext, 140, 150, 250);
-    Graphics_drawLineV(&g_sContext, 150, 250, 300);
-    Graphics_drawLineH(&g_sContext, 140, 150, 300);
+    Graphics_drawLineH(&g_sContext, 140, 180, 200);
+    Graphics_drawLineV(&g_sContext, 180, 200, 250);
+    Graphics_drawLineH(&g_sContext, 180, 190, 250);
+    Graphics_drawLineV(&g_sContext, 190, 250, 300);
+    Graphics_drawLineH(&g_sContext, 180, 190, 300);
 
     // Baro box
     Graphics_drawLineV(&g_sContext, 30, 130, 190);

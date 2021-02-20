@@ -66,14 +66,14 @@ void APP_altispeed_zone5_redraw(int16_t airspeed) {
            .yMin = 10,
            .yMax = 59,
            .xMin = 0,
-           .xMax = 99
+           .xMax = 139
     };
 
     const Graphics_Rectangle clippingZone2 = {
            .yMin = 10,
            .yMax = 59,
-           .xMin = 141,
-           .xMax = 239
+           .xMin = 181,
+           .xMax = 319
     };
 
     Graphics_setFont(&g_sContext, &g_sFontEbrima16b);
@@ -87,42 +87,47 @@ void APP_altispeed_zone5_redraw(int16_t airspeed) {
     prevFraction >>= 1;
     prevX = modBy10(prevX);
     prevX *= INSTRUMENT_ALITSPEED_PPK;
-    prevX += 120 + prevFraction; // this will be the previosDelta
+    prevX += 160 + prevFraction; // this will be the previosDelta
 
     fraction >>= 1;
     int16_t deltaSpeed = modBy10(centerSpeed);
-    int16_t currX = 120 + fraction + deltaSpeed * INSTRUMENT_ALITSPEED_PPK;
+    int16_t currX = 160 + fraction + deltaSpeed * INSTRUMENT_ALITSPEED_PPK;
     centerSpeed -= deltaSpeed;
+    const int16_t step = 10 * INSTRUMENT_ALITSPEED_PPK;
 
     // Move prevX before currX as we don't want to delete what we just printed :D
-    if (prevX < 120) {
+    if (prevX < 160) {
         Graphics_setClipRegion(&g_sContext, (Graphics_Rectangle*)&clippingZone1);
     } else {
         Graphics_setClipRegion(&g_sContext, (Graphics_Rectangle*)&clippingZone2);
     }
-    if (prevX >= currX + 25) {
+    if (prevX >= currX + step / 2) {
         moveLineTextLeft(prevX, prevX, -1);
-        prevX -= 50;
-    } else if (prevX <= currX - 25) {
+        prevX -= step;
+    } else if (prevX <= currX - step / 2) {
         moveLineTextLeft(prevX, prevX, -1);
-        prevX += 50;
+        prevX += step;
     }
 
     // Now start drawing
     Graphics_setClipRegion(&g_sContext, (Graphics_Rectangle*)&clippingZone2);
     moveLineTextLeft(prevX, currX, centerSpeed); // ~0
-    prevX += 50; currX += 50; centerSpeed -= 10;
+    prevX += step; currX += step; centerSpeed -= 10;
     moveLineTextLeft(prevX, currX, centerSpeed); // -10
-    prevX += 50; currX += 50; centerSpeed -= 10;
+    prevX += step; currX += step; centerSpeed -= 10;
     moveLineTextLeft(prevX, currX, centerSpeed); // -20
+    prevX += step; currX += step; centerSpeed -= 10;
+    moveLineTextLeft(prevX, currX, centerSpeed); // -30
 
     Graphics_setClipRegion(&g_sContext, (Graphics_Rectangle*)&clippingZone1);
-    prevX -=150; currX -=150; centerSpeed += 30;
+    prevX -=step*4; currX -=step*3; centerSpeed += 30;
     moveLineTextLeft(prevX, currX, centerSpeed); // +10
-    prevX -= 50; currX -= 50; centerSpeed += 10;
+    prevX -= step; currX -= step; centerSpeed += 10;
     moveLineTextLeft(prevX, currX, centerSpeed); // +20
-    prevX -= 50; currX -= 50; centerSpeed += 10;
+    prevX -= step; currX -= step; centerSpeed += 10;
     moveLineTextLeft(prevX, currX, centerSpeed); // +30
+    prevX -= step; currX -= step; centerSpeed += 10;
+    moveLineTextLeft(prevX, currX, centerSpeed); // +40
 
     Graphics_setClipRegion(&g_sContext, (Graphics_Rectangle*)&noScreenClipping);
 }
