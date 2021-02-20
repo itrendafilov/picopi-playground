@@ -40,46 +40,46 @@ void APP_altispeed_init() {
     // Left arrow   <____  |
     //                   |_|
     //
-    Graphics_drawLineCustom(&g_sContext, 10, 120, 20, 100);
-    Graphics_drawLineCustom(&g_sContext, 10, 120, 20, 140);
-    Graphics_drawLineH(&g_sContext, 20, 60, 100);
-    Graphics_drawLineV(&g_sContext, 60, 90, 100);
-    Graphics_drawLineH(&g_sContext, 60, 85, 90);
-    Graphics_drawLineV(&g_sContext, 85, 90, 150);
-    Graphics_drawLineH(&g_sContext, 60, 85, 150);
-    Graphics_drawLineV(&g_sContext, 60, 140, 150);
-    Graphics_drawLineH(&g_sContext, 20, 60, 140);
+    Graphics_drawLineCustom(&g_sContext, 120, 10, 100, 20);
+    Graphics_drawLineCustom(&g_sContext, 120, 10, 140, 20);
+    Graphics_drawLineV(&g_sContext, 100, 20, 60);
+    Graphics_drawLineH(&g_sContext, 90, 100, 60);
+    Graphics_drawLineV(&g_sContext, 90, 60, 85);
+    Graphics_drawLineH(&g_sContext, 90, 150, 85);
+    Graphics_drawLineV(&g_sContext, 150, 60, 85);
+    Graphics_drawLineH(&g_sContext, 140, 150, 60);
+    Graphics_drawLineV(&g_sContext, 140, 20, 60);
 
     //                    __
     //                ___|  |
     // Right arrow   |___    >
     //                   |__|
     //
-    Graphics_drawLineCustom(&g_sContext, 309, 120, 300, 100);
-    Graphics_drawLineCustom(&g_sContext, 309, 120, 300, 140);
-    Graphics_drawLineV(&g_sContext, 300, 90, 100);
-    Graphics_drawLineH(&g_sContext, 250, 300, 90);
-    Graphics_drawLineV(&g_sContext, 250, 90, 100);
-    Graphics_drawLineH(&g_sContext, 200, 250, 100);
-    Graphics_drawLineV(&g_sContext, 200, 100, 140);
-    Graphics_drawLineH(&g_sContext, 200, 250, 140);
-    Graphics_drawLineV(&g_sContext, 250, 140, 150);
-    Graphics_drawLineH(&g_sContext, 250, 300, 150);
-    Graphics_drawLineV(&g_sContext, 300, 140, 150);
+    Graphics_drawLineCustom(&g_sContext, 120, 309, 100, 300);
+    Graphics_drawLineCustom(&g_sContext, 120, 309, 140, 300);
+    Graphics_drawLineH(&g_sContext, 90, 100, 300);
+    Graphics_drawLineV(&g_sContext, 90, 250, 300);
+    Graphics_drawLineH(&g_sContext, 90, 100, 250);
+    Graphics_drawLineV(&g_sContext, 100, 200, 250);
+    Graphics_drawLineH(&g_sContext, 100, 140, 200);
+    Graphics_drawLineV(&g_sContext, 140, 200, 250);
+    Graphics_drawLineH(&g_sContext, 140, 150, 250);
+    Graphics_drawLineV(&g_sContext, 150, 250, 300);
+    Graphics_drawLineH(&g_sContext, 140, 150, 300);
 
     // Baro box
-    Graphics_drawLineH(&g_sContext, 130, 190, 30);
-    Graphics_drawLineH(&g_sContext, 130, 190, 60);
-    Graphics_drawLineV(&g_sContext, 130, 30, 60);
-    Graphics_drawLineV(&g_sContext, 190, 30, 60);
+    Graphics_drawLineV(&g_sContext, 30, 130, 190);
+    Graphics_drawLineV(&g_sContext, 60, 130, 190);
+    Graphics_drawLineH(&g_sContext, 30, 60, 130);
+    Graphics_drawLineH(&g_sContext, 30, 60, 190);
     Graphics_setFont(&g_sContext, &g_sFontEbrima24b);
-    Graphics_drawStringCentered(&g_sContext, "BARO", 4, 160, 15, false);
+    Graphics_drawStringCentered(&g_sContext, "BARO", 160, 4, 15, false);   // ToDo: FixMe!
 
     const Graphics_Rectangle drawBaroDot = {
-           .xMin = 159,
-           .xMax = 161,
-           .yMin = 49,
-           .yMax = 51
+           .xMin = 49,
+           .xMax = 51,
+           .yMin = 159,
+           .yMax = 161
     };
     Graphics_fillRectangle(&g_sContext, (Graphics_Rectangle*)&drawBaroDot);
 

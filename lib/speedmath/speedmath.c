@@ -2,11 +2,14 @@
 
 bcd32_t hex2bcd(uint16_t x) {
     bcd32_t ret = 0;
+    uint16_t divider = 10000; // 65535 max, i.e. 10^5
+    uint32_t coeff = 65536; // 16^5
     while (x > 0) {
-        uint16_t d = x % 10;
-        x /= 10;
-        ret *= 10;
-        ret += d;
+        uint16_t d = x / divider;
+        x %= divider;
+        ret += d * coeff;
+        divider /= 10;
+        coeff /= 16;
     }
     return ret;
 }

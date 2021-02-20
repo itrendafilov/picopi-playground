@@ -16,12 +16,12 @@ void APP_altispeed_zone5_reset() {
     prevAirspeed = -1;
 }
 
-static void moveLineTextLeft(int oldY, int newY, int val) {
+static void moveLineTextLeft(int oldX, int newX, int val) {
     Graphics_Rectangle blackZone = {
-           .xMin = 22,
-           .xMax = 50,
-           .yMin = oldY - 6,
-           .yMax = oldY + 5
+           .yMin = 22,
+           .yMax = 50,
+           .xMin = oldX - 6,
+           .xMax = oldX + 5
     };
     char text[3] = { ' ', ' ', ' '};
     if (val >= 0) {
@@ -37,23 +37,22 @@ static void moveLineTextLeft(int oldY, int newY, int val) {
     }
 
     Graphics_setForegroundColor(&g_sContext, ClrBlack);
-    Graphics_drawLineH(&g_sContext, 10, 19, oldY);
+    Graphics_drawLineV(&g_sContext, oldX, 10, 19);
     Graphics_fillRectangle(&g_sContext, &blackZone);
 
-    // Color is cached for LineHCustom
-    Graphics_drawLineH(&g_sContext, 10, 19, newY);
     Graphics_setForegroundColor(&g_sContext, ClrWhite);
+    Graphics_drawLineV(&g_sContext, newX, 10, 19);
 
-    int c = 3, x = 52;
+    int c = 3, y = 52;
     char *ptr = &text[2];
     while(c-- > 0) {
-        x -= ((char)*ptr) == '1' ? 9 : 10;
+        y -= ((char)*ptr) == '1' ? 9 : 10;
 //        Graphics_setForegroundColor(&g_sContext, ClrBlack);
 //        Graphics_fillRectangle(&g_sContext, &blackZone);
 
 
         if (*ptr != ' ') {
-            Graphics_copyDisplayCustom(x, newY - 5, (int8_t)(*ptr) - '0', &g_sContext, &g_vdContext);
+            Graphics_copyDisplayCustom(newX - 5, y, (int8_t)(*ptr) - '0', &g_sContext, &g_vdContext);
         }
         ptr--;
 //
@@ -64,66 +63,66 @@ static void moveLineTextLeft(int oldY, int newY, int val) {
 
 void APP_altispeed_zone5_redraw(int16_t airspeed) {
     const Graphics_Rectangle clippingZone1 = {
-           .xMin = 10,
-           .xMax = 59,
-           .yMin = 0,
-           .yMax = 99
+           .yMin = 10,
+           .yMax = 59,
+           .xMin = 0,
+           .xMax = 99
     };
 
     const Graphics_Rectangle clippingZone2 = {
-           .xMin = 10,
-           .xMax = 59,
-           .yMin = 141,
-           .yMax = 239
+           .yMin = 10,
+           .yMax = 59,
+           .xMin = 141,
+           .xMax = 239
     };
 
     Graphics_setFont(&g_sContext, &g_sFontEbrima16b);
 
     int centerSpeed = divBy10(airspeed);
     int fraction = airspeed - centerSpeed * 10;
-    int prevY = divBy10(prevAirspeed);
-    int prevFraction = prevAirspeed - prevY * 10;
+    int prevX = divBy10(prevAirspeed);
+    int prevFraction = prevAirspeed - prevX * 10;
     prevAirspeed = airspeed;
 
     prevFraction >>= 1;
-    prevY = modBy10(prevY);
-    prevY *= INSTRUMENT_ALITSPEED_PPK;
-    prevY += 120 + prevFraction; // this will be the previosDelta
+    prevX = modBy10(prevX);
+    prevX *= INSTRUMENT_ALITSPEED_PPK;
+    prevX += 120 + prevFraction; // this will be the previosDelta
 
     fraction >>= 1;
     int16_t deltaSpeed = modBy10(centerSpeed);
-    int16_t currY = 120 + fraction + deltaSpeed * INSTRUMENT_ALITSPEED_PPK;
+    int16_t currX = 120 + fraction + deltaSpeed * INSTRUMENT_ALITSPEED_PPK;
     centerSpeed -= deltaSpeed;
 
-    // Move prevY before currY as we don't want to delete what we just printed :D
-    if (prevY < 120) {
+    // Move prevX before currX as we don't want to delete what we just printed :D
+    if (prevX < 120) {
         Graphics_setClipRegion(&g_sContext, (Graphics_Rectangle*)&clippingZone1);
     } else {
         Graphics_setClipRegion(&g_sContext, (Graphics_Rectangle*)&clippingZone2);
     }
-    if (prevY >= currY + 25) {
-        moveLineTextLeft(prevY, prevY, -1);
-        prevY -= 50;
-    } else if (prevY <= currY - 25) {
-        moveLineTextLeft(prevY, prevY, -1);
-        prevY += 50;
+    if (prevX >= currX + 25) {
+        moveLineTextLeft(prevX, prevX, -1);
+        prevX -= 50;
+    } else if (prevX <= currX - 25) {
+        moveLineTextLeft(prevX, prevX, -1);
+        prevX += 50;
     }
 
     // Now start drawing
     Graphics_setClipRegion(&g_sContext, (Graphics_Rectangle*)&clippingZone2);
-    moveLineTextLeft(prevY, currY, centerSpeed); // ~0
-    prevY += 50; currY += 50; centerSpeed -= 10;
-    moveLineTextLeft(prevY, currY, centerSpeed); // -10
-    prevY += 50; currY += 50; centerSpeed -= 10;
-    moveLineTextLeft(prevY, currY, centerSpeed); // -20
+    moveLineTextLeft(prevX, currX, centerSpeed); // ~0
+    prevX += 50; currX += 50; centerSpeed -= 10;
+    moveLineTextLeft(prevX, currX, centerSpeed); // -10
+    prevX += 50; currX += 50; centerSpeed -= 10;
+    moveLineTextLeft(prevX, currX, centerSpeed); // -20
 
     Graphics_setClipRegion(&g_sContext, (Graphics_Rectangle*)&clippingZone1);
-    prevY -=150; currY -=150; centerSpeed += 30;
-    moveLineTextLeft(prevY, currY, centerSpeed); // +10
-    prevY -= 50; currY -= 50; centerSpeed += 10;
-    moveLineTextLeft(prevY, currY, centerSpeed); // +20
-    prevY -= 50; currY -= 50; centerSpeed += 10;
-    moveLineTextLeft(prevY, currY, centerSpeed); // +30
+    prevX -=150; currX -=150; centerSpeed += 30;
+    moveLineTextLeft(prevX, currX, centerSpeed); // +10
+    prevX -= 50; currX -= 50; centerSpeed += 10;
+    moveLineTextLeft(prevX, currX, centerSpeed); // +20
+    prevX -= 50; currX -= 50; centerSpeed += 10;
+    moveLineTextLeft(prevX, currX, centerSpeed); // +30
 
     Graphics_setClipRegion(&g_sContext, (Graphics_Rectangle*)&noScreenClipping);
 }

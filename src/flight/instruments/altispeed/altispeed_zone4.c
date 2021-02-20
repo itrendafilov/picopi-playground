@@ -15,31 +15,31 @@ void APP_altispeed_zone4_reset() {
     prevAltitude = -1;
 }
 
-static int clipX(int m, int y) {
+static int clipY(int m, int x) {
     // very special on the center
-    if (y == 120) return 311;
+    if (x == 120) return 311;
 
     if (m) return 310; // m!=0
 
-    if (y < 100) return 301;
-    if (y > 140) return 301;
+    if (x < 100) return 301;
+    if (x > 140) return 301;
 
     // center zone
-    if (y < 104) return 303;
-    if (y < 108) return 306;
-    if (y > 136) return 303;
-    if (y > 132) return 306;
+    if (x < 104) return 303;
+    if (x < 108) return 306;
+    if (x > 136) return 303;
+    if (x > 132) return 306;
 
     return 310;
 }
 
 void APP_altispeed_zone4_redraw(int16_t altitude) {
 
-    int currY = INSTRUMENT_ALTISPEED_START_Y(altitude);
-    int prevY = INSTRUMENT_ALTISPEED_START_Y(prevAltitude);
+    int currX = INSTRUMENT_ALTISPEED_START_X(altitude);
+    int prevX = INSTRUMENT_ALTISPEED_START_X(prevAltitude);
 
-    // Move prevY before currY as we don't want to delete what we just printed :D
-    if (prevY >= currY + (INSTRUMENT_ALITSPEED_PPFX >> 1)) prevY -= INSTRUMENT_ALITSPEED_PPFX;
+    // Move prevX before currX as we don't want to delete what we just printed :D
+    if (prevX >= currX + (INSTRUMENT_ALITSPEED_PPFY >> 1)) prevX -= INSTRUMENT_ALITSPEED_PPFY;
 
     int currM = 0;
     int prevM = 0;
@@ -48,21 +48,21 @@ void APP_altispeed_zone4_redraw(int16_t altitude) {
 
     Graphics_setFont(&g_sContext, &g_sFontEbrima16b);
 
-    Graphics_setForegroundColor(&g_sContext, ClrBlack);
-    for (; currY >= 0 || prevY >= 0;
+    for (; currX >= 0 || prevX >= 0;
         /* step */
-            currY -= INSTRUMENT_ALITSPEED_PPF,
-            prevY -= INSTRUMENT_ALITSPEED_PPF,
+            currX -= INSTRUMENT_ALITSPEED_PPF,
+            prevX -= INSTRUMENT_ALITSPEED_PPF,
             currM++, prevM++)
     {
         /* Delete old line */
+        Graphics_setForegroundColor(&g_sContext, ClrBlack);
         if (prevM == INSTRUMENT_ALITSPEED_PPFD) prevM = 0;
-        Graphics_drawLineH(&g_sContext, clipX(prevM, prevY), 320, prevY);
+        Graphics_drawLineV(&g_sContext, prevX, clipY(prevM, prevX), 320);
 
         /* Draw new line */
-        // Color is cached for LineHCustom
+        Graphics_setForegroundColor(&g_sContext, ClrWhite);
         if (currM == INSTRUMENT_ALITSPEED_PPFD) currM = 0;
-        Graphics_drawLineH(&g_sContext, clipX(currM, currY), 320, currY);
+        Graphics_drawLineV(&g_sContext, currX, clipY(currM, currX), 320);
     }
 }
 

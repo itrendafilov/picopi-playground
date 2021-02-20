@@ -14,8 +14,8 @@ static Graphics_Rectangle digit_mask;
 
 // ILI9341 low-level methods
 extern void ili9486_set_limits(int16_t sX, int16_t sY, int16_t mX, int16_t mY);
-extern void ili9486_write_data(uint16_t value);
-extern void ili9486_write_buffer(uint16_t* values, int16_t windowSize);
+extern void ili9486_write_data(int value);
+extern void ili9486_write_buffer(uint16_t* values, int32_t windowSize);
 
 extern uint32_t * Graphics_convertPalette(const Graphics_Context *context,
         const Graphics_Image *image);
@@ -32,23 +32,23 @@ void Graphics_drawImageCustom(const Graphics_Context *context, const Graphics_Im
 
     // Setup draw window
     int mX = x + bitmap->xSize, mY =  y + bitmap->ySize;
-    ili9486_set_limits(MAPPED_X(mX, mY), MAPPED_Y(x, y), MAPPED_X(x, y), MAPPED_Y(mX, mY));
+    ili9486_set_limits(MAPPED_X(x, y), MAPPED_Y(x, y), MAPPED_X(mX, mY), MAPPED_Y(mX, mY));
 
     // Cache the pallete values into registers
-    register uint16_t pallete0 = Graphics_translateColorOnDisplay(context->display, bitmap->pPalette[0]);
-    register uint16_t pallete1 = Graphics_translateColorOnDisplay(context->display, bitmap->pPalette[1]);
-    register uint16_t pallete2 = Graphics_translateColorOnDisplay(context->display, bitmap->pPalette[2]);
-    register uint16_t pallete3 = Graphics_translateColorOnDisplay(context->display, bitmap->pPalette[3]);
+    register int pallete0 = Graphics_translateColorOnDisplay(context->display, bitmap->pPalette[0]);
+    register int pallete1 = Graphics_translateColorOnDisplay(context->display, bitmap->pPalette[1]);
+    register int pallete2 = Graphics_translateColorOnDisplay(context->display, bitmap->pPalette[2]);
+    register int pallete3 = Graphics_translateColorOnDisplay(context->display, bitmap->pPalette[3]);
 
-    uint8_t step = bitmap->xSize / 4;
+    uint8_t step = bitmap->ySize / 4;
     uint8_t* pPixelStart = (uint8_t*)bitmap->pPixel;
     while (pPixelStart < bitmap->pPixel + step) {
-        uint8_t* pPixelEnd = pPixelStart + (bitmap->ySize)*step;
+        uint8_t* pPixelEnd = pPixelStart + (bitmap->xSize)*step;
 
         uint8_t* j;
 
-        j = pPixelEnd;
-        while (j >= pPixelStart) {
+        j = pPixelStart;
+        while (j <= pPixelEnd) {
             register uint8_t value = *j;
             switch (value & 0xC0) { // 0b1100_0000
             case 0xC0: // 0b1100_0000
@@ -63,11 +63,11 @@ void Graphics_drawImageCustom(const Graphics_Context *context, const Graphics_Im
             default:
                 ili9486_write_data(pallete0);
             }
-            j -= step;
+            j += step;
         }
 
-        j = pPixelEnd;
-        while (j >= pPixelStart) {
+        j = pPixelStart;
+        while (j <= pPixelEnd) {
             register uint8_t value = *j;
             switch (value & 0x30) { // 0b0011_0000
             case 0x30: // 0b0011_0000
@@ -82,11 +82,11 @@ void Graphics_drawImageCustom(const Graphics_Context *context, const Graphics_Im
             default:
                 ili9486_write_data(pallete0);
             }
-            j -= step;
+            j += step;
         }
 
-        j = pPixelEnd;
-        while (j >= pPixelStart) {
+        j = pPixelStart;
+        while (j <= pPixelEnd) {
             register uint8_t value = *j;
             switch (value & 0xC) { // 0b0000_1100
             case 0xC: // 0b0000_1100
@@ -101,11 +101,11 @@ void Graphics_drawImageCustom(const Graphics_Context *context, const Graphics_Im
             default:
                 ili9486_write_data(pallete0);
             }
-            j -= step;
+            j += step;
         }
 
-        j = pPixelEnd;
-        while (j >= pPixelStart) {
+        j = pPixelStart;
+        while (j <= pPixelEnd) {
             register uint8_t value = *j;
             switch (value & 0x3) { // 0b0000_0011
             case 0x3: // 0b0000_0011
@@ -120,7 +120,7 @@ void Graphics_drawImageCustom(const Graphics_Context *context, const Graphics_Im
             default:
                 ili9486_write_data(pallete0);
             }
-            j -= step;
+            j += step;
         }
 
         pPixelStart++;
@@ -132,8 +132,8 @@ void Graphics_drawImageCustom(const Graphics_Context *context, const Graphics_Im
 
 static inline void drawDigit(int x, int y, int d, int w, int h, const Graphics_Image* srcImage) {
     // Sets the address to point to the proper image
-    digit_window.xSize = w;
-    digit_window.ySize = h;
+    digit_window.xSize = h;
+    digit_window.ySize = w;
     digit_window.pPixel = &srcImage->pPixel[d];
     digit_window.pPalette = srcImage->pPalette;
 
@@ -141,7 +141,7 @@ static inline void drawDigit(int x, int y, int d, int w, int h, const Graphics_I
 }
 
 static inline void drawRoll(int x, int y, int d, int w, int h, int r, const Graphics_Image* srcImage) {
-    drawDigit(x, y - r, d - r, w, h + (r << 1), srcImage);
+    drawDigit(x - r, y, d - r, w, h + (r << 1), srcImage);
 }
 
 //////////////////////////////////////////////
@@ -191,13 +191,13 @@ void Graphics_clearDigitMedium(int x, int y) {
 void Graphics_clearDigitMediumRollSmall(int x, int y) {
     digit_mask.xMin = x;
     digit_mask.xMax = x + CALC_EBRIMA_MEDIUM_WIDTH;
-    digit_mask.yMin = y - CALC_EBRIMA_MEDIUM_ROLL_SMALL_Y;
+    digit_mask.yMin = y - CALC_EBRIMA_MEDIUM_ROLL_SMALL_X;
     digit_mask.yMax = y - 1;
 
     Graphics_fillRectangle(&g_sContext, &digit_mask);
 
     digit_mask.yMin = y + CALC_EBRIMA_MEDIUM_HEIGHT;
-    digit_mask.yMax = digit_mask.yMin + CALC_EBRIMA_MEDIUM_ROLL_SMALL_Y;
+    digit_mask.yMax = digit_mask.yMin + CALC_EBRIMA_MEDIUM_ROLL_SMALL_X;
     Graphics_fillRectangle(&g_sContext, &digit_mask);
 
 }
@@ -216,7 +216,7 @@ void Graphics_drawDigitMediumRoll(int x, int y, int digit, int roll) {
     digit -= CALC_EBRIMA_MEDIUM_DIGIT_ROLL(roll);
 
     drawRoll(x, y, digit,
-             CALC_EBRIMA_MEDIUM_WIDTH, CALC_EBRIMA_MEDIUM_HEIGHT, CALC_EBRIMA_MEDIUM_ROLL_Y,
+             CALC_EBRIMA_MEDIUM_WIDTH, CALC_EBRIMA_MEDIUM_HEIGHT, CALC_EBRIMA_MEDIUM_ROLL_X,
               &numbers_ebrima_medium_2bpp);
 }
 
@@ -226,7 +226,7 @@ void Graphics_drawDigitMediumRollSmall(int x, int y, int digit, int roll) {
     digit -= CALC_EBRIMA_MEDIUM_DIGIT_ROLL(roll);
 
     drawRoll(x, y, digit,
-             CALC_EBRIMA_MEDIUM_WIDTH, CALC_EBRIMA_MEDIUM_HEIGHT, CALC_EBRIMA_MEDIUM_ROLL_SMALL_Y,
+             CALC_EBRIMA_MEDIUM_WIDTH, CALC_EBRIMA_MEDIUM_HEIGHT, CALC_EBRIMA_MEDIUM_ROLL_SMALL_X,
               &numbers_ebrima_medium_2bpp);
 }
 
@@ -236,21 +236,20 @@ void Graphics_drawDigitMediumRollZeros(int x, int y, int roll) {
     digit -= CALC_EBRIMA_MEDIUM_DIGIT_ROLL(roll);
 
     drawRoll(x, y, digit,
-             CALC_EBRIMA_MEDIUM_WIDTH, CALC_EBRIMA_MEDIUM_HEIGHT, CALC_EBRIMA_MEDIUM_ROLL_Y,
+             CALC_EBRIMA_MEDIUM_WIDTH, CALC_EBRIMA_MEDIUM_HEIGHT, CALC_EBRIMA_MEDIUM_ROLL_X,
               &numbers_ebrima_medium0_2bpp);
 }
 #endif /* NUMBERS_EBRIMA_MEDIUM */
 
 #ifdef NUMBERS_EBRIMA_MEDIUM_MEMMAP
-extern const unsigned int pixel_numbers_medium_memmap;
+extern const int pixel_numbers_medium_memmap;
 
 void Graphics_drawDigitMediumMemmap(int x, int y, int digit) {
-    int mX = x + CALC_EBRIMA_MEDIUM_WIDTH, mY =  y + CALC_EBRIMA_MEDIUM_HEIGHT;
-    ili9486_set_limits(MAPPED_X(mX, mY), MAPPED_Y(x, y), MAPPED_X(x, y), MAPPED_Y(mX, mY));
+    int mX = x + CALC_EBRIMA_MEDIUM_HEIGHT, mY = y + CALC_EBRIMA_MEDIUM_WIDTH;
+    ili9486_set_limits(MAPPED_X(x, y), MAPPED_Y(x, y), MAPPED_X(mX, mY), MAPPED_Y(mX, mY));
 
     digit = CALC_EBRIMA_MEDIUM_DIGIT_MM(digit);
-    uint16_t *diplayData = (uint16_t*)&pixel_numbers_medium_memmap;
-    diplayData += digit;
+    uint16_t *diplayData = (uint16_t*)(digit + (uint16_t*)&pixel_numbers_medium_memmap);
     y = CALC_EBRIMA_MEDIUM_WIDTH;
     while (y-- > 0) {
         ili9486_write_buffer(diplayData, CALC_EBRIMA_MEDIUM_HEIGHT + 1);
@@ -259,15 +258,15 @@ void Graphics_drawDigitMediumMemmap(int x, int y, int digit) {
 }
 
 void Graphics_drawDigitMediumMemmapRoll(int x, int y, int digit, int roll) {
-    const uint8_t h = CALC_EBRIMA_MEDIUM_HEIGHT + (CALC_EBRIMA_MEDIUM_ROLL_Y << 1);
-    y -= CALC_EBRIMA_MEDIUM_ROLL_Y;
-    int mX = x + CALC_EBRIMA_MEDIUM_WIDTH, mY =  y + h;
-    ili9486_set_limits(MAPPED_X(mX, mY), MAPPED_Y(x, y), MAPPED_X(x, y), MAPPED_Y(mX, mY));
+    const uint8_t h = CALC_EBRIMA_MEDIUM_HEIGHT + (CALC_EBRIMA_MEDIUM_ROLL_X << 1);
+    x -= CALC_EBRIMA_MEDIUM_ROLL_X;
+    int mY = y + CALC_EBRIMA_MEDIUM_WIDTH, mX = x + h;
+    ili9486_set_limits(MAPPED_X(x, y), MAPPED_Y(x, y), MAPPED_X(mX, mY), MAPPED_Y(mX, mY));
 
-    digit = CALC_EBRIMA_MEDIUM_DIGIT_MM(digit) - CALC_EBRIMA_MEDIUM_ROLL_Y;
+    digit = CALC_EBRIMA_MEDIUM_DIGIT_MM(digit) - CALC_EBRIMA_MEDIUM_ROLL_X;
     digit += CALC_EBRIMA_DIGIT_ROLL_PIX(roll, CALC_EBRIMA_MEDIUM_HEIGHT_SPACED);
     uint16_t *diplayData = (uint16_t*)&pixel_numbers_medium_memmap;
-    diplayData += digit;
+    diplayData = (uint16_t*)(digit + diplayData);
     y = CALC_EBRIMA_MEDIUM_WIDTH;
     while (y-- > 0) {
         ili9486_write_buffer(diplayData, h + 1);
@@ -276,15 +275,15 @@ void Graphics_drawDigitMediumMemmapRoll(int x, int y, int digit, int roll) {
 }
 
 void Graphics_drawDigitMediumMemmapRollSmall(int x, int y, int digit, int roll) {
-    const uint8_t h = CALC_EBRIMA_MEDIUM_HEIGHT + (CALC_EBRIMA_MEDIUM_ROLL_SMALL_Y << 1);
-    y -= CALC_EBRIMA_MEDIUM_ROLL_SMALL_Y;
-    int mX = x + CALC_EBRIMA_MEDIUM_WIDTH, mY =  y + h;
-    ili9486_set_limits(MAPPED_X(mX, mY), MAPPED_Y(x, y), MAPPED_X(x, y), MAPPED_Y(mX, mY));
+    const uint8_t h = CALC_EBRIMA_MEDIUM_HEIGHT + (CALC_EBRIMA_MEDIUM_ROLL_SMALL_X << 1);
+    x -= CALC_EBRIMA_MEDIUM_ROLL_SMALL_X;
+    int mY = y + CALC_EBRIMA_MEDIUM_WIDTH, mX = x + h;
+    ili9486_set_limits(MAPPED_X(x, y), MAPPED_Y(x, y), MAPPED_X(mX, mY), MAPPED_Y(mX, mY));
 
-    digit = CALC_EBRIMA_MEDIUM_DIGIT_MM(digit) - CALC_EBRIMA_MEDIUM_ROLL_SMALL_Y;
+    digit = CALC_EBRIMA_MEDIUM_DIGIT_MM(digit) - CALC_EBRIMA_MEDIUM_ROLL_SMALL_X;
     digit += CALC_EBRIMA_DIGIT_ROLL_PIX(roll, CALC_EBRIMA_MEDIUM_HEIGHT_SPACED);
     uint16_t *diplayData = (uint16_t*)&pixel_numbers_medium_memmap;
-    diplayData += digit;
+    diplayData = (uint16_t*)(digit + diplayData);
     y = CALC_EBRIMA_MEDIUM_WIDTH;
     while (y-- > 0) {
         ili9486_write_buffer(diplayData, h + 1);

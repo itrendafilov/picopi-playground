@@ -412,7 +412,7 @@ ili9486_DriverPixelDrawMultiple(void *pvDisplayData,
     uint16_t ulByte;
 
     // draw one pixel per line with up to lCount
-    ili9486_set_limits(MAPPED_X(lX, lY), MAPPED_Y(lX, lY), MAPPED_X(lX, lY), LCD_Y_SIZE - 1); // MAPPED_Y(lX, lY) + lCount);
+    ili9486_set_limits(MAPPED_X(lX, lY), MAPPED_Y(lX, lY), MAPPED_X(lX, lY) + lCount, MAPPED_Y(lX, lY));
 
     //
     // Determine how to interpret the pixel data based on the number of bits

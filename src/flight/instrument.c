@@ -11,7 +11,7 @@
 // #include "pico/sem.h"
 // static semaphore_t semInstUpdate;
 
-volatile static unsigned int activeInstrument = APP_INSTRUMENT_HORIZON; //APP_INSTRUMENT_ALTITUDE_SPEED;
+volatile static unsigned int activeInstrument = APP_INSTRUMENT_ALTITUDE_SPEED; // APP_INSTRUMENT_HORIZON; //
 
 static void instrumentClearScreen() {
     Graphics_clearDisplay(&g_sContext);

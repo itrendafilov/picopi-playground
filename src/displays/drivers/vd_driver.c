@@ -420,8 +420,8 @@ const Graphics_Display g_vdDisplay =
 #else
     (void*)pixel_numbers_memmap,
 #endif
-    VD_Y_SIZE, // we are in PORTRAIT mode thus reverse X and Y
     VD_X_SIZE,
+    VD_Y_SIZE,
     vd_DriverPixelDraw,
     vd_DriverPixelDrawMultiple,
     vd_DriverLineDrawH,

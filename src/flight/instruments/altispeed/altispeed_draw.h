@@ -8,22 +8,22 @@
 #define INSTRUMENT_ALITSPEED_PPK             5   // PIXELS_PER_KNOT
 #define INSTRUMENT_ALITSPEED_PPFD            5   // Sub Divisions between Major
 #define INSTRUMENT_ALITSPEED_PPF             16  // PIXELS_PER_100_FEET
-#define INSTRUMENT_ALITSPEED_PPFX            80  // PIXELS_PER_500_FEET
+#define INSTRUMENT_ALITSPEED_PPFY            80  // PIXELS_PER_500_FEET
 #define INSTRUMENT_ALITSPEED_FACTOR_KIAS     10  // Factor with which we multiply the KIAS so we don't use float
 
 #define INSTRUMENT_ALTISPEED_APPD(alt)       ((alt << 2) / 25)        // divide by 6.25 (int optimized) = (100 / INSTRUMENT_ALITSPEED_PPF)
-#define INSTRUMENT_ALTISPEED_ATOX(alt)       (INSTRUMENT_ALTISPEED_APPD(alt % 100))
+#define INSTRUMENT_ALTISPEED_ATOY(alt)       (INSTRUMENT_ALTISPEED_APPD(alt % 100))
 #define INSTRUMENT_ALTISPEED_ATOM(alt)       ((alt / 100) % 5)
 #define INSTRUMENT_ALTISPEED_ATOD(alt)       (alt / 500)
 
 /*
- * 1. Start at Y 120
+ * 1. Start at X 120
  * 2. Add the delta between last minor division and current value
  * 3. Add delta from minor to major division
  * 4. We can view up to two major scale so add an offset for them
  */
-#define INSTRUMENT_ALTISPEED_START_YC(alt)   (120 + INSTRUMENT_ALTISPEED_ATOX(alt) + INSTRUMENT_ALTISPEED_ATOM(alt) * INSTRUMENT_ALITSPEED_PPF)
-#define INSTRUMENT_ALTISPEED_START_Y(alt)    (INSTRUMENT_ALTISPEED_START_YC(alt) + 2 * INSTRUMENT_ALITSPEED_PPFX)
+#define INSTRUMENT_ALTISPEED_START_XC(alt)   (120 + INSTRUMENT_ALTISPEED_ATOY(alt) + INSTRUMENT_ALTISPEED_ATOM(alt) * INSTRUMENT_ALITSPEED_PPF)
+#define INSTRUMENT_ALTISPEED_START_X(alt)    (INSTRUMENT_ALTISPEED_START_XC(alt) + 2 * INSTRUMENT_ALITSPEED_PPFY)
 
 
 typedef enum {

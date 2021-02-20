@@ -781,8 +781,9 @@ void  Graphics_drawStringCentered(const Graphics_Context *context,
 		bool  opaque)
 {
 	Graphics_drawString(context, string, length,
-			(x) - (Graphics_getStringWidth(context, string, length) / 2),
-			(y) - (context->font->baseline / 2), opaque);
+			(x) - (context->font->baseline / 2),
+			(y) - (Graphics_getStringWidth(context, string, length) / 2)
+            , opaque);
 
 }
 

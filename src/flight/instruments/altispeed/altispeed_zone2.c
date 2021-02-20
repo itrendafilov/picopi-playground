@@ -24,19 +24,19 @@ void APP_altispeed_zone2_redraw(int16_t baro) {
     bcd32_t curr = hex2bcd(baro);
 
     if ((curr & 0xF) != (prev & 0xF)) {
-        Graphics_drawDigitSmall(175, 37, curr & 0xF);
+        Graphics_drawDigitSmall(37, 175, curr & 0xF);
     }
     curr >>= 4; prev >>= 4;
     if ((curr & 0xF) != (prev & 0xF)) {
-        Graphics_drawDigitSmall(163, 37, curr & 0xF);
+        Graphics_drawDigitSmall(37, 163, curr & 0xF);
     }
     curr >>= 4; prev >>= 4;
     if ((curr & 0xF) != (prev & 0xF)) {
-        Graphics_drawDigitSmall(146, 37, curr & 0xF);
+        Graphics_drawDigitSmall(37, 146, curr & 0xF);
     }
     curr >>= 4; prev >>= 4;
     if ((curr & 0xF) != (prev & 0xF)) {
-        Graphics_drawDigitSmall(134, 37, curr & 0xF);
+        Graphics_drawDigitSmall(37, 134, curr & 0xF);
     }
 }
 
