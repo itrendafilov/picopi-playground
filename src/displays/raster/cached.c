@@ -31,7 +31,7 @@ void Graphics_copyDisplayCustom(int x0, int y0, int offset,
     //
     if(x0 < dest->clipRegion.xMin)
     {
-        displayData += src->display->heigth * (dest->clipRegion.xMin - x0);
+        displayData += (dest->clipRegion.xMin - x0);
         x0 = dest->clipRegion.xMin;
         clipped = true;
     }
@@ -51,7 +51,7 @@ void Graphics_copyDisplayCustom(int x0, int y0, int offset,
     }
     if(y1 > dest->clipRegion.yMax)
     {
-        displayData += y1 - dest->clipRegion.yMax;
+        displayData += src->display->width*(y1 - dest->clipRegion.yMax);
         y1 = dest->clipRegion.yMax;
         clipped = true;
     }
@@ -64,10 +64,10 @@ void Graphics_copyDisplayCustom(int x0, int y0, int offset,
         ili9486_write_buffer(displayData, src->display->width * src->display->heigth);
     } else {
         ili9486_set_limits(MAPPED_X(x0, y0), MAPPED_Y(x0, y0), MAPPED_X(x1, y1), MAPPED_Y(x1, y1));
-        y1 -= y0 - 1; // new height
-        while (x1-- > x0) {
-            ili9486_write_buffer(displayData, y1);
-            displayData += src->display->heigth;
+        x1 -= x0 - 1; // new height
+        while (y1-- > y0) {
+            ili9486_write_buffer(displayData, x1);
+            displayData += src->display->width;
         }
     }
 }
