@@ -560,8 +560,7 @@ void Graphics_drawString(const Graphics_Context *context, int8_t *string,
                     if(((y + y0) >= sContext.clipRegion.yMin) && opaque)
                     {
                         sContext.foreground = context->background;
-                        Graphics_drawLineH(&sContext, x + x0, x + x0 + count - 1,
-                        		ySave + y + y0);
+                        Graphics_drawLineV(&sContext, ySave + y + y0, x + x0, x + x0 + count - 1);
                     }
 
                     //
@@ -590,7 +589,7 @@ void Graphics_drawString(const Graphics_Context *context, int8_t *string,
                        ((x + x0) <= sContext.clipRegion.xMax) &&
                        ((y + y0) >= sContext.clipRegion.yMin) && opaque)
                     {
-                       Graphics_drawPixelOnDisplay(context->display, x + x0, ySave + y + y0,
+                       Graphics_drawPixelOnDisplay(context->display, ySave + y + y0, x + x0,
                                      context->background);
                     }
 
@@ -661,8 +660,7 @@ void Graphics_drawString(const Graphics_Context *context, int8_t *string,
                     if((y + y0) >= sContext.clipRegion.yMin)
                     {
                         sContext.foreground = context->foreground;
-                        Graphics_drawLineH(&sContext, x + x0, x + x0 + count - 1,
-                        		ySave + y + y0);
+                        Graphics_drawLineV(&sContext, ySave + y + y0, x + x0, x + x0 + count - 1);
                         
                     }
 
@@ -691,7 +689,7 @@ void Graphics_drawString(const Graphics_Context *context, int8_t *string,
                     if(((x + x0) >= sContext.clipRegion.xMin) &&
                        ((x + x0) <= sContext.clipRegion.xMax) &&
                        ((y + y0) >= sContext.clipRegion.yMin))
-                    	Graphics_drawPixelOnDisplay(context->display, x + x0, ySave + y + y0,
+                    	Graphics_drawPixelOnDisplay(context->display, ySave + y + y0, x + x0,
                                      context->foreground);
           
                     //
@@ -781,8 +779,8 @@ void  Graphics_drawStringCentered(const Graphics_Context *context,
 		bool  opaque)
 {
 	Graphics_drawString(context, string, length,
-			(x) - (context->font->baseline / 2),
-			(y) - (Graphics_getStringWidth(context, string, length) / 2)
+			(x) - (Graphics_getStringWidth(context, string, length) / 2),
+			(y) - (context->font->baseline / 2)
             , opaque);
 
 }

@@ -73,7 +73,7 @@ void APP_altispeed_init() {
     Graphics_drawLineH(&g_sContext, 30, 60, 130);
     Graphics_drawLineH(&g_sContext, 30, 60, 190);
     Graphics_setFont(&g_sContext, &g_sFontEbrima24b);
-    Graphics_drawStringCentered(&g_sContext, "BARO", 160, 4, 15, false);   // ToDo: FixMe!
+    Graphics_drawStringCentered(&g_sContext, "BARO", 4, 160, 15, false);   // ToDo: FixMe!
 
     const Graphics_Rectangle drawBaroDot = {
            .xMin = 49,
