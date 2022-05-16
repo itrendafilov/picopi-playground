@@ -14,13 +14,6 @@
 
 static semaphore_t horizonDrawing;
 
-#ifndef M_PI
-#define M_PI    3.1415926535
-#endif
-#define M_TAU   6.2831853070
-#define M_ETA   1.5707963268
-#define M_TORAD 0.0174532925
-
 #define ANG_TRI_RADS  0.0434782608 // 2.5 degrees in rads. Used in triangle calculation
 #define point_x_on_circle(radius, angle)  (int)round(radius*sin(angle))+160
 #define point_y_on_circle(radius, angle)  (int)round(radius*cos(angle))+240
@@ -102,8 +95,7 @@ void APP_horizon_draw_arc() {
 int val_x1, val_y1, val_x2, val_y2, val_x3, val_y3;
 void APP_horizon_draw_bank() {
     Graphics_setForegroundColor(&g_sContext, ClrGold);
-    float angle = prevPhi;
-    angle -= M_ETA; // rotate 90 degrees
+    float angle = M_PI_2 + M_PI - prevPhi;
 //    int x0 = 93.0*cos(angle)+160, y0 = 93.0*sin(angle)+120; // for clear
     val_x1 = point_x_on_circle(138.0, angle);
     val_y1 = point_y_on_circle(138.0, angle);
@@ -181,7 +173,7 @@ void APP_horizon_init() {
 }
 
 void APP_horizon_refresh() {
-    float phi = horizonParams[APP_INSTRUMENT_HORIZON_BANK] * M_TORAD; // convert to rads and store
+    float phi = (horizonParams[APP_INSTRUMENT_HORIZON_BANK] * M_PI) / 180.0; // convert to rads and store
     float currA = tan(phi);
     // we draw attack angle with 12px per degree
     float currB = 160.0 - 240.0*currA + horizonParams[APP_INSTRUMENT_HORIZON_PITCH]*12.0;

@@ -35,8 +35,11 @@ void APP_altispeed_zone0_redraw(int16_t airspeed) {
     prev >>= 4;
     int8_t currDigit = (int8_t)curr & 0xF;
     int8_t prevDigit = (int8_t)prev & 0xF;
+#ifdef INSTRUMENT_ALITSPEED_USE_MEMMAPED    
     Graphics_drawDigitMediumMemmapRoll(150, 65, currDigit, currRoll);
-
+#else
+    Graphics_drawDigitMediumRoll(150, 65, currDigit, currRoll);
+#endif
     int y;
     int8_t currLastDigit;
     for (y = 45; y >= 25; y-=20) {
@@ -47,7 +50,11 @@ void APP_altispeed_zone0_redraw(int16_t airspeed) {
         prevDigit = prev & 0xF;
 
         if (currLastDigit == 9 && currRoll >= 3) {
+#ifdef INSTRUMENT_ALITSPEED_USE_MEMMAPED                
             Graphics_drawDigitMediumMemmapRollSmall(150, y, currDigit, currRoll);
+#else
+            Graphics_drawDigitMediumRollSmall(150, y, currDigit, currRoll);
+#endif
         } else if (curr) {  // has more digits
             currRoll = 0; // no need to roll digits on left
             if (prevRoll) {
@@ -56,7 +63,11 @@ void APP_altispeed_zone0_redraw(int16_t airspeed) {
                 Graphics_setForegroundColor(&g_sContext, ClrWhite);
             }
             if (currDigit != prevDigit || (prevRoll >= 3)) {
+#ifdef INSTRUMENT_ALITSPEED_USE_MEMMAPED                
                 Graphics_drawDigitMediumMemmap(150, y, currDigit);
+#else
+                Graphics_drawDigitMedium(150, y, currDigit);
+#endif
             }
         } else {
             Graphics_setForegroundColor(&g_sContext, ClrBlack);
